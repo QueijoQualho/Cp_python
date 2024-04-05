@@ -1,6 +1,6 @@
 import re
-from customExceptions import *
-from ..models import usuario
+from models import usuario
+from models import roleEnum
 
 def _validaEmail(email: str) -> bool:
     regexEmail = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
@@ -28,7 +28,13 @@ def _validaSenha(senha: str) -> bool:
         return False
     
     return True
+
+def _validaRole(role: str) -> bool:
+    if not isinstance(role, roleEnum):
+        return False
     
+    return True
+
 def cadastro():
     email = input("Digite o Email: ")
     senha = input("Digite a Senha: ")
@@ -39,5 +45,8 @@ def cadastro():
     
     if not _validaSenha(senha):
         raise ValueError("Senha inválida")
+    
+    if not _validaRole(role):
+        raise ValueError("Role Inválida")
     
     return usuario(email, senha, role)
