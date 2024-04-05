@@ -30,15 +30,12 @@ def _validaSenha(senha: str) -> bool:
     return True
 
 def _validaRole(role: str) -> bool:
-    if not isinstance(role, roleEnum):
-        return False
-    
-    return True
+    return role in [r.value for r in roleEnum]
 
 def cadastro():
     email = input("Digite o Email: ")
     senha = input("Digite a Senha: ")
-    role = input("Digite sua Role: ")
+    role = input("Digite sua Role: ").upper()
     
     if not _validaEmail(email):
         raise ValueError("Email inválido")

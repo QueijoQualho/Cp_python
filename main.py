@@ -6,3 +6,8 @@ while True:
           + "2. Login \n"
           + "==================")
     opcao = input("Opção: ")
+
+    match opcao:
+        case "1":
+            cadastro()
+
