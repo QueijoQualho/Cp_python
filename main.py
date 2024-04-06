@@ -1,6 +1,7 @@
 from auth.authFunctions import *
+from pokemon.pokeFunctions import pega_pokemon
+from pprint import pprint
 import json
-
 
 def menu() -> None:
     print(
@@ -10,6 +11,7 @@ def menu() -> None:
         + "3. Atualizar Dados \n"
         + "4. Mostrar Lista \n"
         + "5. Maior Numero primo \n"
+        + "6. Pegar Usuario Pro id \n"
         + "0. Sair \n"
         + "=================="
     )
@@ -17,8 +19,7 @@ def menu() -> None:
 
 def mostrar_lista(listaDeUsuarios) -> None:
     print("====== Lista de Usuários ======")
-    for usuario in listaDeUsuarios:
-        print(f"Email: {usuario.email} | Senha: {usuario.senha} | Role: {usuario.role}")
+    pprint([usuario.__dict__ for usuario in listaDeUsuarios])  # Usando pprint aqui
     print("==============================")
 
 
@@ -37,12 +38,13 @@ def valida_usuario_acesso(userLogado: Usuario) -> bool:
 
 
 # TODO Questao 7
-def salvar_dados_usuarios(lista_usuarios):
+def salvar_dados_usuarios(lista_usuarios) -> None:
     with open("dados_usuarios.json", "w") as file:
+        # TODO Questao 10
         json.dump([usuario.__dict__ for usuario in lista_usuarios], file)
 
 
-def carregar_dados_usuarios():
+def carregar_dados_usuarios() -> list:
     try:
         with open("dados_usuarios.json", "r") as file:
             dados = json.load(file)
@@ -50,11 +52,10 @@ def carregar_dados_usuarios():
     except FileNotFoundError:
         return []
 
-
 def main():
     userLogado = None
     listUsuarios = carregar_dados_usuarios()
-    # ADMIN = ("admin", "162", "ADMIN"))
+    # ADMIN = Usuario("admin", "162", "ADMIN"))
     # Senha = ASDasd123!@#
 
     while True:
@@ -69,9 +70,9 @@ def main():
                 # TODO Questão 6
                 senha_hash = hash(senha)
 
-                for user in listUsuarios:
-                    if user.email == email and user.senha == senha_hash:
-                        userLogado = user
+                for usuario in listUsuarios:
+                    if usuario.email == email and usuario.senha == senha_hash:
+                        userLogado = usuario
                         break
                 else:
                     print("Senha ou Email inválidos")
@@ -93,6 +94,13 @@ def main():
                     print(f"O maior numero primo é {n}")
                 else:
                     print("Valor inválido")
+            case "6":
+                usuario = pegar_por_id(listUsuarios)
+
+                if usuario:
+                    pprint(usuario.__dict__)
+                else:
+                    print("Usuário não encontrado.")
 
             case "0":
                 print("Saindo")

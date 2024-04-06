@@ -1,5 +1,6 @@
 from models.usuario import Usuario
 from models.roleEnum import Role
+from pokemon.pokeFunctions import pega_pokemon
 import re
 
 
@@ -60,7 +61,11 @@ def cadastro() -> Usuario:
 
         senha = hash(senha)
 
-        return Usuario(email, senha, role)
+        id_user = email + senha
+        
+        pokemon = pega_pokemon(int(senha))
+
+        return Usuario(id_user, email, senha, role, pokemon)
     except ValueError as ve:
         print(f"Erro durante o cadastro: {ve}")
 
@@ -69,13 +74,16 @@ def cadastro() -> Usuario:
 def atualizar_dados(userLogado: Usuario, listaDeUsuarios: list[Usuario]) -> None:
 
     try:
+        if userLogado == None:
+            raise Exception("O usuário não está logado!")
+        
         if userLogado.role == "USER":
             senha = input("Digite sua nova Senha: ")
 
             if not _valida_senha(senha):
                 raise ValueError("Senha inválida")
 
-            userLogado.senha = senha
+            userLogado.senha = hash(senha)
             print("Usuario Atualizado com Sucesso!")
 
         else:  # ADMIN
@@ -125,3 +133,12 @@ def hash(senha: str) -> str:
 
     return str(senha_ord % numPrimo)
 
+
+# TODO Questão 9
+def pegar_por_id(listaDeUsuarios: list[Usuario]) -> Usuario:
+    id_usuario = input("Qual o id do usuario: ")
+    for user in listaDeUsuarios:
+        if user.id == id_usuario:
+            return user
+    else:
+        return None
