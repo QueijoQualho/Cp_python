@@ -1,7 +1,8 @@
 import re
-from models import usuario
-from models import roleEnum
+from models.usuario import Usuario
+from models.roleEnum import Role
 
+#TODO QUESTÃO 1
 def _validaEmail(email: str) -> bool:
     regexEmail = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
 
@@ -30,9 +31,11 @@ def _validaSenha(senha: str) -> bool:
     return True
 
 def _validaRole(role: str) -> bool:
-    return role in [r.value for r in roleEnum]
+    return role.upper() in Role._value2member_map_
 
-def cadastro():
+#TODO QUESTãO 2 
+def cadastro() -> Usuario:
+
     email = input("Digite o Email: ")
     senha = input("Digite a Senha: ")
     role = input("Digite sua Role: ").upper()
@@ -46,4 +49,22 @@ def cadastro():
     if not _validaRole(role):
         raise ValueError("Role Inválida")
     
-    return usuario(email, senha, role)
+    return Usuario(email, senha, role)
+
+#TODO QUESTÃO 3
+def atualizarDados(userLogado: Usuario, listaDeUsuarios: list):
+    
+    while True:
+        if userLogado.role == 'USER':
+            senha = input("Digite sua nova Senha: ")
+            
+            if not _validaSenha(senha):
+                raise ValueError("Senha inválida")
+            
+            userLogado.senha = senha
+            print("Usuario Atualizado com Sucesso!")
+            break
+        else: #ADMIN
+            a
+            
+        
