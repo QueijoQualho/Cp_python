@@ -11,7 +11,7 @@ def menu() -> None:
         + "3. Atualizar Dados \n"
         + "4. Mostrar Lista \n"
         + "5. Maior Numero primo \n"
-        + "6. Pegar Usuario Pro id \n"
+        + "6. Pegar Usuario Por id \n"
         + "0. Sair \n"
         + "=================="
     )
@@ -44,7 +44,7 @@ def salvar_dados_usuarios(lista_usuarios) -> None:
         json.dump([usuario.__dict__ for usuario in lista_usuarios], file)
 
 
-def carregar_dados_usuarios() -> list:
+def carregar_dados_usuarios() -> dict:
     try:
         with open("dados_usuarios.json", "r") as file:
             dados = json.load(file)
@@ -80,6 +80,9 @@ def main():
             case "2":
                 if valida_usuario_acesso(userLogado):
                     novo_usuario = cadastro()
+                                        
+                    if novo_usuario == None:
+                        continue
                     listUsuarios.append(novo_usuario)
                     salvar_dados_usuarios(listUsuarios)
 
@@ -103,8 +106,11 @@ def main():
                     print("Usuário não encontrado.")
 
             case "0":
-                print("Saindo")
+                print("Saindo...")
                 break
+            
+            case _:
+                print("Opção inválida")
 
 
 if __name__ == "__main__":

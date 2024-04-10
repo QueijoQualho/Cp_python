@@ -6,9 +6,16 @@ import re
 
 # TODO QUESTÃO 1
 def _valida_email(email: str) -> bool:
+
+# Compilar a expressão regular para encontrar padrões de endereços de e-mail
     regexEmail = re.compile(
-        r"([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+"
+        r"([A-Za-z0-9]+[.-_])*"   # Nome de usuário: letras, números, ponto, hífen ou sublinhado, repetidos zero ou mais vezes
+        r"[A-Za-z0-9]+"           # Nome de usuário: letras maiúsculas ou minúsculas ou dígitos de 0 a 9
+        r"@"                      # Separador entre nome de usuário e domínio
+        r"[A-Za-z0-9-]+"          # Domínio: letras maiúsculas ou minúsculas, dígitos de 0 a 9 ou hífen
+        r"(\.[A-Z|a-z]{2,})+"     # TLD (domínio de nível superior): letras maiúsculas ou minúsculas, pelo menos duas
     )
+
 
     if email is None:
         return False
@@ -61,9 +68,9 @@ def cadastro() -> Usuario:
 
         senha = hash(senha)
 
-        id_user = email + senha
+        id_user = hash(email + senha)
         
-        pokemon = pega_pokemon(int(senha))
+        pokemon = pega_pokemon(id_user)
 
         return Usuario(id_user, email, senha, role, pokemon)
     except ValueError as ve:
@@ -129,7 +136,7 @@ def hash(senha: str) -> str:
         senha_ord += str(ord(char))
 
     senha_ord = int(senha_ord)
-    numPrimo = maior_num_primo(200)
+    numPrimo = maior_num_primo(1025)
 
     return str(senha_ord % numPrimo)
 
